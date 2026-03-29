@@ -1,3 +1,10 @@
+import { useState, useEffect, useCallback, useRef } from "react";
+import { ethers } from "ethers";
+import FileUpload from "./components/FileUpload";
+import Display from "./components/Display";
+import Modal from "./components/Modal";
+import "./App.css";
+
 // ABI is inlined to avoid path resolution issues on CI/deployment when artifacts are not available.
 const Upload = {
   abi: [
@@ -59,13 +66,6 @@ const Upload = {
     }
   ]
 };
-
-import { useState, useEffect, useCallback, useRef } from "react";
-import { ethers } from "ethers";
-import FileUpload from "./components/FileUpload";
-import Display from "./components/Display";
-import Modal from "./components/Modal";
-import "./App.css";
 
 // ⚠️  Replace with your deployed contract address, or set REACT_APP_CONTRACT_ADDRESS in client/.env
 
