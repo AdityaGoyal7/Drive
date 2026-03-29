@@ -96,7 +96,6 @@ function App() {
   const [toasts, setToasts]         = useState([]);
   const [connecting, setConnecting] = useState(false);
   const [fileCount, setFileCount]   = useState(0);
-  const [activeTab, setActiveTab]   = useState("myVault");
 
   // Keep a stable ref to addToast so connectWallet (called once in useEffect)
   // doesn't need addToast as a dep and avoids the stale-closure / infinite-loop trap.
@@ -195,13 +194,6 @@ function App() {
   const formatAddr = (addr) =>
     addr ? `${addr.slice(0, 6)}…${addr.slice(-4)}` : "Not connected";
 
-  const sidebarItems = [
-    { icon: "🏠", label: "My Vault",       key: "myVault" },
-    { icon: "🌐", label: "Browse Vaults",  key: "browse"  },
-    { icon: "🔗", label: "Shared with me", key: "shared"  },
-    { icon: "⭐", label: "Starred",         key: "starred" },
-  ];
-
   /* ── render ── */
   return (
     <div className="app-shell">
@@ -250,49 +242,6 @@ function App() {
 
       {/* ── Main layout ── */}
       <div className="main-content">
-        {/* Sidebar */}
-        <nav className="sidebar">
-          {sidebarItems.map((item) => (
-            <div
-              key={item.key}
-              className={`sidebar-item ${activeTab === item.key ? "active" : ""}`}
-              onClick={() => setActiveTab(item.key)}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => e.key === "Enter" && setActiveTab(item.key)}
-            >
-              <span className="item-icon" aria-hidden="true">{item.icon}</span>
-              {item.label}
-              {/* Note: Browse/Shared/Starred tabs show the same vault viewer
-                  scoped to the connected account. Full multi-vault routing
-                  would require a router (react-router) — kept minimal here. */}
-            </div>
-          ))}
-
-          <div className="sidebar-section-label">Network</div>
-          <div className="sidebar-item">
-            <span className="item-icon" aria-hidden="true">🔷</span>
-            Localhost 1337
-          </div>
-          <div className="sidebar-item">
-            <span className="item-icon" aria-hidden="true">📌</span>
-            IPFS / Pinata
-          </div>
-
-          <div className="storage-card">
-            <div className="storage-label">Session activity</div>
-            <div className="storage-bar-bg">
-              <div
-                className="storage-bar-fill"
-                style={{ width: `${Math.min(fileCount * 10, 100)}%` }}
-              />
-            </div>
-            <div className="storage-info">
-              <span>{fileCount}</span> file{fileCount !== 1 ? "s" : ""} uploaded
-            </div>
-          </div>
-        </nav>
-
         {/* Workspace */}
         <main className="workspace">
           {/* Upload */}
