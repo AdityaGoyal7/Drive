@@ -146,16 +146,13 @@
   gap: 0;
   position: relative;
   z-index: 1;
+  width: 100%;
+  min-height: 0;
 }
 
 /* ===== SIDEBAR ===== */
 .sidebar {
-  width: 300px;
-  background: linear-gradient(135deg, rgba(18, 18, 18, 0.95), rgba(15, 10, 35, 0.95));
-  border-right: 1px solid rgba(99, 102, 241, 0.15);
-  overflow-y: auto;
-  backdrop-filter: blur(20px);
-  padding: 0;
+  display: none;
 }
 
 .sidebar-content {
@@ -384,11 +381,14 @@
 /* ===== WORKSPACE ===== */
 .workspace {
   flex: 1;
-  padding: 32px;
+  padding: 32px 48px;
   display: flex;
   flex-direction: column;
   gap: 28px;
   overflow-y: auto;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 /* ===== UPLOAD ZONE ===== */
@@ -822,4 +822,30 @@
 @keyframes slideIn {
   from { transform: translateX(100%); opacity: 0; }
   to { transform: translateX(0); opacity: 1; }
+}
+
+/* ===== FOOTER ===== */
+.app-footer {
+  background: linear-gradient(135deg, rgba(18, 18, 18, 0.95), rgba(15, 10, 35, 0.95));
+  border-top: 1px solid rgba(99, 102, 241, 0.15);
+  padding: 40px 48px;
+  text-align: center;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.8;
+  width: 100%;
+}
+
+.app-footer h3 {
+  color: #818cf8;
+  font-size: 20px;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.app-footer p {
+  margin: 6px 0;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
 }

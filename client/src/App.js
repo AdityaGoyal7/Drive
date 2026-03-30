@@ -388,6 +388,13 @@ function App() {
         </main>
       </div>
 
+      {/* Footer with VaultHub info */}
+      <footer className="app-footer">
+        <h3>🌐 VaultHub</h3>
+        <p><strong>Your Web3 Secure Storage</strong></p>
+        <p>Store your files permanently on IPFS with blockchain verification. Share access with others through Ethereum addresses. Complete control, zero intermediaries.</p>
+      </footer>
+
       {/* Share modal — only rendered when open and contract exists */}
       {modalOpen && contract && (
         <Modal setModalOpen={setModalOpen} contract={contract} addToast={addToast} />
