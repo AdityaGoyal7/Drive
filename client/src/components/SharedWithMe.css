@@ -1,0 +1,121 @@
+.shared-container {
+  width: 100%;
+}
+
+.shared-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.shared-card {
+  padding: 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.shared-card:hover {
+  border-color: var(--accent-blue);
+  background: rgba(217, 119, 6, 0.05);
+  box-shadow: 0 8px 32px rgba(217, 119, 6, 0.1);
+}
+
+.shared-avatar {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-blue));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  margin-bottom: 12px;
+  border: 2px solid rgba(217, 119, 6, 0.2);
+}
+
+.shared-info {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.shared-addr {
+  font-family: monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-blue);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+}
+
+.shared-status {
+  font-size: 11px;
+  color: var(--success);
+  font-weight: 500;
+}
+
+.shared-action {
+  width: 100%;
+}
+
+.shared-view-btn {
+  width: 100%;
+  padding: 8px;
+  background: rgba(217, 119, 6, 0.1);
+  border: 1px solid rgba(217, 119, 6, 0.2);
+  border-radius: 10px;
+  color: var(--accent-blue);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.shared-view-btn:hover {
+  background: rgba(217, 119, 6, 0.2);
+  border-color: var(--accent-blue);
+}
+
+.shared-empty {
+  padding: 60px 20px;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.shared-empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.4;
+}
+
+.shared-empty-text {
+  font-size: 15px;
+}
+
+.shared-loading,
+.shared-error {
+  padding: 32px;
+  text-align: center;
+  border-radius: 16px;
+  background: rgba(217, 119, 6, 0.05);
+  border: 1px solid rgba(217, 119, 6, 0.1);
+  font-size: 14px;
+}
+
+.shared-loading {
+  color: var(--accent-blue);
+}
+
+.shared-error {
+  color: var(--danger);
+}

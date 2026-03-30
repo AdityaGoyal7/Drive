@@ -3,6 +3,7 @@ import { ethers } from "ethers";
 import FileUpload from "./components/FileUpload";
 import Display from "./components/Display";
 import Modal from "./components/Modal";
+import SharedWithMe from "./components/SharedWithMe";
 import "./App.css";
 
 // ABI is inlined to avoid path resolution issues on CI/deployment when artifacts are not available.
@@ -264,26 +265,69 @@ function App() {
 
       {/* ── Main layout ── */}
       <div className="main-content">
-        {/* About Section */}
-        <section className="about-banner">
-          <div className="about-content">
-            <h1>🌐 Welcome to VaultHub</h1>
-            <p>Your decentralized file vault powered by Web3 technology. Store files on IPFS, secured by blockchain. Your data, your rules.</p>
-            <div className="about-features">
-              <div className="feature-tag">🔐 Decentralized</div>
-              <div className="feature-tag">⛓️ Blockchain Verified</div>
-              <div className="feature-tag">🚀 IPFS Storage</div>
-              <div className="feature-tag">🤝 Shareable Access</div>
+        {/* Left Sidebar - About & Info */}
+        <aside className="sidebar">
+          <div className="sidebar-content">
+            <div className="about-card">
+              <div className="about-icon">🌐</div>
+              <h2>VaultHub</h2>
+              <p className="about-tagline">Your Web3 Secure Storage</p>
+              <div className="about-description">
+                <p>Store your files permanently on IPFS with blockchain verification. Share access with others through Ethereum addresses. Complete control, zero intermediaries.</p>
+              </div>
+            </div>
+
+            <div className="features-card">
+              <h3>How It Works</h3>
+              <div className="feature-item">
+                <div className="feature-number">1</div>
+                <div>
+                  <h4>Upload</h4>
+                  <p>Select a file and upload to IPFS through Pinata</p>
+                </div>
+              </div>
+              <div className="feature-item">
+                <div className="feature-number">2</div>
+                <div>
+                  <h4>Record</h4>
+                  <p>Your file URL gets recorded on the blockchain</p>
+                </div>
+              </div>
+              <div className="feature-item">
+                <div className="feature-number">3</div>
+                <div>
+                  <h4>Share</h4>
+                  <p>Grant access to others via their wallet address</p>
+                </div>
+              </div>
+              <div className="feature-item">
+                <div className="feature-number">4</div>
+                <div>
+                  <h4>Manage</h4>
+                  <p>Delete entries or revoke access anytime</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="tech-card">
+              <h3>Built With Web3</h3>
+              <div className="tech-badges">
+                <span className="tech-badge">Ethereum</span>
+                <span className="tech-badge">IPFS</span>
+                <span className="tech-badge">Solidity</span>
+                <span className="tech-badge">Web3.js</span>
+              </div>
             </div>
           </div>
-        </section>
+        </aside>
 
-        {/* Workspace */}
+        {/* Right Content - Main Workspace */}
         <main className="workspace">
           {/* Upload */}
           <section>
             <div className="section-header">
               <div className="section-title">⬆ Upload File</div>
+              <div className="section-description">Pin your files to IPFS, verified on blockchain</div>
             </div>
             <FileUpload
               account={account}
@@ -303,6 +347,7 @@ function App() {
                   <span className="section-count">{fileCount} new</span>
                 )}
               </div>
+              <div className="section-description">Manage your stored files and access permissions</div>
             </div>
             <Display
               contract={contract}
@@ -310,6 +355,17 @@ function App() {
               onDelete={(msg) => addToast(msg, "success")}
             />
           </section>
+
+          {/* Shared with me section */}
+          {account && (
+            <section>
+              <div className="section-header">
+                <div className="section-title">🤝 Shared With Me</div>
+                <div className="section-description">Addresses that have granted you access to their vaults</div>
+              </div>
+              <SharedWithMe contract={contract} account={account} />
+            </section>
+          )}
         </main>
       </div>
 
