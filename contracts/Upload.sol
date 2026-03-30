@@ -14,8 +14,19 @@ contract Upload {
   mapping(address=>mapping(address=>bool)) previousData;
 
   function add(address _user,string memory url) external {
+      require(_user == msg.sender, "Can only add to your own vault");
       value[_user].push(url);
   }
+
+  function remove(uint index) external {
+      string[] storage urls = value[msg.sender];
+      require(index < urls.length, "Invalid index");
+      if (index < urls.length - 1) {
+          urls[index] = urls[urls.length - 1];
+      }
+      urls.pop();
+  }
+
   function allow(address user) external {//def
       ownership[msg.sender][user]=true; 
       if(previousData[msg.sender][user]){

@@ -4,6 +4,8 @@ import "./Display.css";
 const Display = ({ contract, account }) => {
   const [items, setItems]       = useState([]);
   const [searchAddr, setSearchAddr] = useState("");
+  const [activeAddress, setActiveAddress] = useState("");
+  const [isOwner, setIsOwner]     = useState(false);
   const [loading, setLoading]   = useState(false);
   const [fetched, setFetched]   = useState(false);
   const [error, setError]       = useState("");
@@ -38,6 +40,10 @@ const Display = ({ contract, account }) => {
 
     try {
       const target = searchAddr.trim() || account;
+      const normalizedAccount = account?.toLowerCase() || "";
+      setActiveAddress(target);
+      setIsOwner(target.toLowerCase() === normalizedAccount);
+
       const raw = await contract.display(target);   // string[]
 
       if (!raw || raw.length === 0) {
@@ -70,6 +76,40 @@ const Display = ({ contract, account }) => {
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") loadVault();
+  };
+
+  const removeItem = async (index) => {
+    if (!contract) {
+      setError("No contract connected");
+      return;
+    }
+    if (!account) {
+      setError("Connect wallet to remove files");
+      return;
+    }
+    if (!isOwner) {
+      setError("Only vault owner can remove files");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+    try {
+      const tx = await contract.remove(index);
+      await tx.wait();
+
+      // Reload current view so ordering stays consistent after removal
+      await loadVault();
+
+      if (typeof onDelete === "function") {
+        onDelete("Image removed from vault");
+      }
+    } catch (err) {
+      console.error("remove() error:", err);
+      setError(err?.reason || err?.message || "Failed to remove file");
+    } finally {
+      setLoading(false);
+    }
   };
 
   /* ── Copy helper ── */
@@ -127,7 +167,13 @@ const Display = ({ contract, account }) => {
       {items.length > 0 && (
         <div className="image-grid" style={{ marginTop: 16 }}>
           {items.map((item, i) => (
-            <FileCard key={i} item={item} onCopy={copyLink} />
+            <FileCard
+              key={i}
+              item={item}
+              onCopy={copyLink}
+              isOwner={isOwner}
+              onRemove={() => removeItem(i)}
+            />
           ))}
         </div>
       )}
@@ -136,7 +182,7 @@ const Display = ({ contract, account }) => {
 };
 
 /* ── FileCard — isolated so onError has a stable ref to its own div ── */
-const FileCard = ({ item, onCopy }) => {
+const FileCard = ({ item, onCopy, isOwner, onRemove }) => {
   const [imgFailed, setImgFailed] = useState(false);
 
   return (
@@ -179,6 +225,14 @@ const FileCard = ({ item, onCopy }) => {
             title="Copy IPFS link"
             onClick={() => onCopy(item.displayUrl)}
           >⧉</button>
+          {isOwner && (
+            <button
+              className="icon-btn"
+              title="Remove file from vault"
+              onClick={onRemove}
+              style={{ color: "#e74c3c" }}
+            >🗑</button>
+          )}
         </div>
       </div>
     </div>

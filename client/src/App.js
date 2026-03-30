@@ -48,6 +48,15 @@ const Upload = {
       type: "function"
     },
     {
+      inputs: [
+        { internalType: "uint256", name: "index", type: "uint256" }
+      ],
+      name: "remove",
+      outputs: [],
+      stateMutability: "nonpayable",
+      type: "function"
+    },
+    {
       inputs: [],
       name: "shareAccess",
       outputs: [
@@ -267,7 +276,11 @@ function App() {
                 )}
               </div>
             </div>
-            <Display contract={contract} account={account} />
+            <Display
+              contract={contract}
+              account={account}
+              onDelete={(msg) => addToast(msg, "success")}
+            />
           </section>
         </main>
       </div>
