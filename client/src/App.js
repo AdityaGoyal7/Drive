@@ -78,7 +78,7 @@ const Upload = {
 
 // ⚠️  Replace with your deployed contract address, or set REACT_APP_CONTRACT_ADDRESS in client/.env
 
-  const CONTRACT_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS || "0x3D05c5847A7EFeA19ae2EcD800996cdB70dcFbFc";
+  const CONTRACT_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS || "0x58Dd530de8eF92C73E3E77539Ba0473713C310d6";
 
 /* ─── Toast system ──────────────────────────────────────────────── */
 let _toastId = 0;
