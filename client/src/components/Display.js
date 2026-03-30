@@ -1,10 +1,9 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import "./Display.css";
 
 const Display = ({ contract, account, onDelete }) => {
   const [items, setItems]       = useState([]);
   const [searchAddr, setSearchAddr] = useState("");
-  const [activeAddress, setActiveAddress] = useState("");
   const [isOwner, setIsOwner]     = useState(false);
   const [loading, setLoading]   = useState(false);
   const [fetched, setFetched]   = useState(false);
@@ -41,8 +40,8 @@ const Display = ({ contract, account, onDelete }) => {
     try {
       const target = searchAddr.trim() || account;
       const normalizedAccount = account?.toLowerCase() || "";
-      setActiveAddress(target);
-      setIsOwner(target.toLowerCase() === normalizedAccount);
+      const normalizedTarget = target?.toLowerCase() || "";
+      setIsOwner(normalizedTarget === normalizedAccount);
 
       const raw = await contract.display(target);   // string[]
 
@@ -77,6 +76,13 @@ const Display = ({ contract, account, onDelete }) => {
   const handleKeyDown = (e) => {
     if (e.key === "Enter") loadVault();
   };
+
+  // Auto-load own vault on mount or when account changes
+  useEffect(() => {
+    if (contract && account && !searchAddr) {
+      loadVault();
+    }
+  }, [contract, account, searchAddr, loadVault]);
 
   const removeItem = async (index) => {
     if (!contract) {
@@ -136,6 +142,9 @@ const Display = ({ contract, account, onDelete }) => {
             spellCheck={false}
             autoComplete="off"
           />
+          {fetched && isOwner && (
+            <span style={{ marginLeft: 8, fontSize: 12, color: "#27ae60" }}>✓ Your vault</span>
+          )}
         </div>
         <button
           className="btn-getdata"

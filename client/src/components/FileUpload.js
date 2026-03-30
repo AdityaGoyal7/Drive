@@ -5,11 +5,12 @@ import "./FileUpload.css";
 const PINATA_API_KEY = process.env.REACT_APP_PINATA_API_KEY || "35e007aaf8f88d968673";
 const PINATA_SECRET  = process.env.REACT_APP_PINATA_SECRET_KEY || "50f3f2dbab4f6d3a79414dd84656a67548f8fa78bc47a616e8affffc0ca0cd78";
 
-const FileUpload = ({ contract, account, onUploadSuccess }) => {
+const FileUpload = ({ contract, account, onUploadSuccess, onUploadProgress }) => {
   const [file, setFile]         = useState(null);
   const [fileName, setFileName] = useState("");
   const [uploading, setUploading] = useState(false);
   const [dragOver, setDragOver] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState("");
   const inputRef = useRef(null);
 
   /* ── File selection ── */
@@ -58,8 +59,13 @@ const FileUpload = ({ contract, account, onUploadSuccess }) => {
     }
 
     setUploading(true);
+    setUploadStatus("");
     try {
       /* 1. Pin to IPFS via Pinata */
+      const msg1 = "📌 Pinning file to IPFS...";
+      setUploadStatus(msg1);
+      onUploadProgress?.(msg1);
+      
       const formData = new FormData();
       formData.append("file", file);
 
@@ -75,11 +81,21 @@ const FileUpload = ({ contract, account, onUploadSuccess }) => {
       });
 
       const ipfsUrl = `https://gateway.pinata.cloud/ipfs/${pinataRes.data.IpfsHash}`;
+      const msg2 = "✓ Pinned to IPFS! Confirming on blockchain...";
+      setUploadStatus(msg2);
+      onUploadProgress?.(msg2);
 
       /* 2. Record the URL on-chain */
       const tx = await contract.add(account, ipfsUrl);
+      const msg3 = "⏳ Waiting for transaction to be confirmed...";
+      setUploadStatus(msg3);
+      onUploadProgress?.(msg3);
+      
       await tx.wait(); // wait for the tx to be mined
 
+      const msg4 = "✓ Transaction confirmed! File uploaded successfully";
+      setUploadStatus(msg4);
+      onUploadProgress?.(msg4);
       onUploadSuccess?.({ name: fileName, url: ipfsUrl });
       clearFile();
     } catch (err) {
@@ -92,6 +108,7 @@ const FileUpload = ({ contract, account, onUploadSuccess }) => {
       onUploadSuccess?.(null, msg);
     } finally {
       setUploading(false);
+      setUploadStatus("");
     }
   };
 
@@ -178,7 +195,7 @@ const FileUpload = ({ contract, account, onUploadSuccess }) => {
           <div className="progress-bar-bg">
             <div className="progress-bar-fill" />
           </div>
-          <div className="progress-text">Pinning to IPFS → confirming on-chain…</div>
+          <div className="progress-text">{uploadStatus || "Processing…"}</div>
         </div>
       )}
     </div>

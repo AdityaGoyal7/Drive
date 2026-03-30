@@ -192,8 +192,21 @@ function App() {
       if (errorMsg) {
         addToast(`Upload failed: ${errorMsg}`, "error");
       } else if (result) {
-        addToast(`"${result.name}" pinned to IPFS ✓`, "success");
+        addToast(`✓ "${result.name}" uploaded successfully!`, "success");
         setFileCount((n) => n + 1);
+      }
+    },
+    [addToast]
+  );
+
+  const handleUploadProgress = useCallback(
+    (status) => {
+      if (status.includes("failed") || status.includes("error")) {
+        addToast(status, "error", 3000);
+      } else if (status.includes("✓")) {
+        addToast(status, "success", 3000);
+      } else {
+        addToast(status, "info", 2000);
       }
     },
     [addToast]
@@ -263,6 +276,7 @@ function App() {
               provider={provider}
               contract={contract}
               onUploadSuccess={handleUploadResult}
+              onUploadProgress={handleUploadProgress}
             />
           </section>
 
