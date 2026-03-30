@@ -1,26 +1,26 @@
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
 
 :root {
-  --bg-deep: #060914;
-  --bg-card: #0d1526;
-  --bg-glass: rgba(13, 21, 38, 0.7);
-  --border: rgba(99, 179, 237, 0.12);
-  --border-hover: rgba(99, 179, 237, 0.3);
-  --accent-blue: #4f8ef7;
-  --accent-cyan: #38bdf8;
-  --accent-purple: #a78bfa;
-  --accent-glow: rgba(79, 142, 247, 0.25);
-  --text-primary: #e8f1ff;
-  --text-secondary: #7e9cc0;
-  --text-muted: #4a6080;
-  --success: #34d399;
+  --bg-deep: #0f0a1a;
+  --bg-card: #1a0f2e;
+  --bg-glass: rgba(26, 15, 46, 0.7);
+  --border: rgba(139, 92, 246, 0.15);
+  --border-hover: rgba(139, 92, 246, 0.3);
+  --accent-blue: #8b5cf6;
+  --accent-cyan: #06b6d4;
+  --accent-purple: #ec4899;
+  --accent-glow: rgba(139, 92, 246, 0.3);
+  --text-primary: #f0e7ff;
+  --text-secondary: #a78bfa;
+  --text-muted: #6d28d9;
+  --success: #10b981;
   --danger: #f87171;
   --warning: #fbbf24;
   --font-display: 'Syne', sans-serif;
   --font-body: 'DM Sans', sans-serif;
   --radius: 16px;
   --radius-sm: 10px;
-  --shadow-glow: 0 0 40px rgba(79, 142, 247, 0.15);
+  --shadow-glow: 0 0 40px rgba(139, 92, 246, 0.25);
   --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 

@@ -229,9 +229,9 @@ function App() {
       {/* ── Top bar ── */}
       <header className="topbar">
         <div className="topbar-brand">
-          <div className="brand-icon" aria-hidden="true">⬡</div>
-          <span className="brand-name">ChainVault</span>
-          <span className="brand-badge">3.0</span>
+          <div className="brand-icon" aria-hidden="true">⚡</div>
+          <span className="brand-name">VaultHub</span>
+          <span className="brand-badge">Web3</span>
         </div>
 
         <div className="topbar-right">
@@ -264,6 +264,20 @@ function App() {
 
       {/* ── Main layout ── */}
       <div className="main-content">
+        {/* About Section */}
+        <section className="about-banner">
+          <div className="about-content">
+            <h1>🌐 Welcome to VaultHub</h1>
+            <p>Your decentralized file vault powered by Web3 technology. Store files on IPFS, secured by blockchain. Your data, your rules.</p>
+            <div className="about-features">
+              <div className="feature-tag">🔐 Decentralized</div>
+              <div className="feature-tag">⛓️ Blockchain Verified</div>
+              <div className="feature-tag">🚀 IPFS Storage</div>
+              <div className="feature-tag">🤝 Shareable Access</div>
+            </div>
+          </div>
+        </section>
+
         {/* Workspace */}
         <main className="workspace">
           {/* Upload */}
