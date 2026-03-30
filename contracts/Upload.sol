@@ -8,24 +8,23 @@ contract Upload {
      address user; 
      bool access; //true or false
   }
-  mapping(address=>string[]) value;
+  struct UploadedFile {
+    string url;
+    bool deleted;
+  }
+  mapping(address=>UploadedFile[]) value;
   mapping(address=>mapping(address=>bool)) ownership;
   mapping(address=>Access[]) accessList;
   mapping(address=>mapping(address=>bool)) previousData;
 
   function add(address _user,string memory url) external {
       require(_user == msg.sender, "Can only add to your own vault");
-      value[_user].push(url);
+      value[_user].push(UploadedFile(url, false));
   }
 
   function remove(uint index) external {
       require(index < value[msg.sender].length, "Invalid index");
-      string[] storage urls = value[msg.sender];
-      uint lastIndex = urls.length - 1;
-      if (index != lastIndex) {
-          urls[index] = urls[lastIndex];
-      }
-      urls.pop();
+      value[msg.sender][index].deleted = true;
   }
 
   function allow(address user) external {//def
@@ -53,7 +52,23 @@ contract Upload {
 
   function display(address _user) external view returns(string[] memory){
       require(_user==msg.sender || ownership[_user][msg.sender],"You don't have access");
-      return value[_user];
+      UploadedFile[] storage files = value[_user];
+      uint count = 0;
+      
+      // Count non-deleted files
+      for(uint i = 0; i < files.length; i++){
+          if(!files[i].deleted) count++;
+      }
+      
+      string[] memory result = new string[](count);
+      uint index = 0;
+      for(uint i = 0; i < files.length; i++){
+          if(!files[i].deleted){
+              result[index] = files[i].url;
+              index++;
+          }
+      }
+      return result;
   }
 
   function shareAccess() public view returns(Access[] memory){
