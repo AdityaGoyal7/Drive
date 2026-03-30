@@ -379,8 +379,8 @@ function App() {
           {account && (
             <section>
               <div className="section-header">
-                <div className="section-title">🤝 Shared With Me</div>
-                <div className="section-description">Addresses that have granted you access to their vaults</div>
+                <div className="section-title">🤝 Shared With :</div>
+                <div className="section-description">Addresses that have access to your vaults</div>
               </div>
               <SharedWithMe contract={contract} account={account} />
             </section>
