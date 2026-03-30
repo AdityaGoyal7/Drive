@@ -7,10 +7,12 @@ module.exports = {
     hardhat: {
       chainId: 1337,
     },
-    sepolia: {
-      url: process.env.ALCHEMY_URL,
-      accounts: [process.env.PRIVATE_KEY],
-    },
+    ...(process.env.ALCHEMY_URL && process.env.PRIVATE_KEY && {
+      sepolia: {
+        url: process.env.ALCHEMY_URL,
+        accounts: [process.env.PRIVATE_KEY],
+      },
+    }),
   },
   paths: {
     artifacts: "./client/src/artifacts",
