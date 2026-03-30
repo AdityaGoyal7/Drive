@@ -13,11 +13,12 @@ const SharedWithMe = ({ contract, account }) => {
     setError("");
     try {
       const access = await contract.shareAccess();
-      const allowed = access.filter((item) => item.access);
+      // Filter only addresses with access: true
+      const allowed = access.filter((item) => item.access === true);
       setAccessList(allowed);
     } catch (err) {
       console.error("Error fetching shared access:", err);
-      setError("Failed to load shared access");
+      setError("Failed to load");
     } finally {
       setLoading(false);
     }
@@ -25,23 +26,29 @@ const SharedWithMe = ({ contract, account }) => {
 
   useEffect(() => {
     loadSharedAccess();
+    // Refresh every 10 seconds
+    const interval = setInterval(loadSharedAccess, 10000);
+    return () => clearInterval(interval);
   }, [loadSharedAccess]);
 
-  const formatAddr = (addr) => `${addr.slice(0, 6)}…${addr.slice(-4)}`;
+  const formatAddr = (addr) => {
+    if (!addr) return "Unknown";
+    return `${addr.slice(0, 6)}…${addr.slice(-4)}`;
+  };
 
   if (loading) {
-    return <div className="shared-loading">⏳ Loading accessible vaults...</div>;
+    return <div className="shared-empty">⏳ Loading...</div>;
   }
 
   if (error) {
-    return <div className="shared-error">⚠️ {error}</div>;
+    return <div className="shared-empty">⚠️ {error}</div>;
   }
 
   if (accessList.length === 0) {
     return (
       <div className="shared-empty">
         <div className="shared-empty-icon">🔒</div>
-        <div className="shared-empty-text">No one has shared their vault with you yet</div>
+        <div className="shared-empty-text">No shared vaults yet</div>
       </div>
     );
   }
@@ -52,27 +59,8 @@ const SharedWithMe = ({ contract, account }) => {
         {accessList.map((item, idx) => (
           <div key={idx} className="shared-card">
             <div className="shared-avatar">👤</div>
-            <div className="shared-info">
-              <div className="shared-addr" title={item.user}>
-                {formatAddr(item.user)}
-              </div>
-              <div className="shared-status">✓ Access Granted</div>
-            </div>
-            <div className="shared-action">
-              <button
-                className="shared-view-btn"
-                onClick={() => {
-                  const input = prompt("View this vault? Enter address:", item.user);
-                  if (input === item.user) {
-                    window.location.hash = `#vault=${item.user}`;
-                    window.location.reload();
-                  }
-                }}
-                title="View this vault"
-              >
-                👁
-              </button>
-            </div>
+            <div className="shared-addr">{formatAddr(item.user)}</div>
+            <div className="shared-status">✓ Shared</div>
           </div>
         ))}
       </div>
