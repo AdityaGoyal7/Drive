@@ -267,12 +267,13 @@
 }
 
 /* ===== TECH CARD (SIDEBAR) ===== */
-.tech-card 16px;
+.tech-card {
+  padding: 16px;
   background: rgba(99, 102, 241, 0.08);
   border: 1px solid rgba(99, 102, 241, 0.15);
   border-radius: 14px;
-  display: nonegba(99, 102, 241, 0.15);
-  border-radius: 16px;
+  display: none;
+}
 }
 
 .tech-card h3 {
