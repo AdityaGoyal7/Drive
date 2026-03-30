@@ -80,7 +80,7 @@ const Upload = {
 
 // ⚠️  Replace with your deployed contract address, or set REACT_APP_CONTRACT_ADDRESS in client/.env
 
-  const CONTRACT_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS || "0x58Dd530de8eF92C73E3E77539Ba0473713C310d6";
+  const CONTRACT_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS || "0x21D9B637E0204e7240e65d8fA461E6156d884A89";
 
 /* ─── Toast system ──────────────────────────────────────────────── */
 let _toastId = 0;
@@ -206,7 +206,15 @@ function App() {
         addToast(`✓ "${result.name}" uploaded successfully!`, "success");
         setFileCount((n) => n + 1);
       }
-    },  addTransaction(status, "error", 4000);
+    },
+    [addToast]
+  );
+
+  const handleUploadProgress = useCallback(
+    (status) => {
+      if (status.includes("failed") || status.includes("error")) {
+        addToast(status, "error", 3000);
+        addTransaction(status, "error", 4000);
       } else if (status.includes("✓")) {
         addToast(status, "success", 3000);
         addTransaction(status, "success", 4000);
@@ -215,15 +223,7 @@ function App() {
         addTransaction(status, "info", 2000);
       }
     },
-    [addToast, addTransactiontus.includes("failed") || status.includes("error")) {
-        addToast(status, "error", 3000);
-      } else if (status.includes("✓")) {
-        addToast(status, "success", 3000);
-      } else {
-        addToast(status, "info", 2000);
-      }
-    },
-    [addToast]
+    [addToast, addTransaction]
   );
 
   /* ── helpers ── */
@@ -333,10 +333,12 @@ function App() {
             </div>
           </div>
         </aside>
-Transaction History Panel */}
-          {transactions.length > 0 && <TransactionPanel transactions={transactions} />
+
         {/* Right Content - Main Workspace */}
         <main className="workspace">
+          {/* Transaction History Panel */}
+          {transactions.length > 0 && <TransactionPanel transactions={transactions} />}
+
           {/* Upload */}
           <section>
             <div className="section-header">
@@ -362,14 +364,14 @@ Transaction History Panel */}
                 )}
               </div>
               <div className="section-description">Manage your stored files and access permissions</div>
-            </div>{
-                addToast(msg, "success");
-                addTransaction(msg, "success", 5000);
-              }
+            </div>
             <Display
               contract={contract}
               account={account}
-              onDelete={(msg) => addToast(msg, "success")}
+              onDelete={(msg) => {
+                addToast(msg, "success");
+                addTransaction(msg, "success", 5000);
+              }}
             />
           </section>
 
