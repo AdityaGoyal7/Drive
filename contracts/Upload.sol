@@ -19,10 +19,12 @@ contract Upload {
   }
 
   function remove(uint index) external {
+      require(index < value[msg.sender].length, "Invalid index");
       string[] storage urls = value[msg.sender];
-      require(index < urls.length, "Invalid index");
-      require(urls.length > 0, "Cannot remove from empty vault");
-      urls[index] = urls[urls.length - 1];
+      uint lastIndex = urls.length - 1;
+      if (index != lastIndex) {
+          urls[index] = urls[lastIndex];
+      }
       urls.pop();
   }
 
