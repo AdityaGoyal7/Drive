@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import "./Display.css";
 
-const Display = ({ contract, account }) => {
+const Display = ({ contract, account, onDelete }) => {
   const [items, setItems]       = useState([]);
   const [searchAddr, setSearchAddr] = useState("");
   const [activeAddress, setActiveAddress] = useState("");
@@ -99,9 +99,9 @@ const Display = ({ contract, account }) => {
       await tx.wait();
 
       // Reload current view so ordering stays consistent after removal
-      await loadVault();
+      setTimeout(() => loadVault(), 500);
 
-      if (typeof onDelete === "function") {
+      if (onDelete) {
         onDelete("Image removed from vault");
       }
     } catch (err) {
