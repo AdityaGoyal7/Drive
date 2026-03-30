@@ -4,6 +4,7 @@ import FileUpload from "./components/FileUpload";
 import Display from "./components/Display";
 import Modal from "./components/Modal";
 import SharedWithMe from "./components/SharedWithMe";
+import TransactionPanel from "./components/TransactionPanel";
 import "./App.css";
 
 // ABI is inlined to avoid path resolution issues on CI/deployment when artifacts are not available.
@@ -106,6 +107,7 @@ function App() {
   const [toasts, setToasts]         = useState([]);
   const [connecting, setConnecting] = useState(false);
   const [fileCount, setFileCount]   = useState(0);
+  const [transactions, setTransactions] = useState([]);
 
   // Keep a stable ref to addToast so connectWallet (called once in useEffect)
   // doesn't need addToast as a dep and avoids the stale-closure / infinite-loop trap.
@@ -115,6 +117,14 @@ function App() {
     const id = ++_toastId;
     setToasts((prev) => [...prev, { id, message, type }]);
     setTimeout(() => setToasts((prev) => prev.filter((t) => t.id !== id)), duration);
+  }, []);
+
+  // Add transaction
+  const addTransaction = useCallback((message, type = "info", duration = 6000) => {
+    const txId = Date.now();
+    const tx = { id: txId, message, type, timestamp: new Date() };
+    setTransactions((prev) => [tx, ...prev.slice(0, 4)]); // Keep last 5
+    setTimeout(() => setTransactions((prev) => prev.filter((t) => t.id !== txId)), duration);
   }, []);
 
   // Keep ref in sync
@@ -196,13 +206,16 @@ function App() {
         addToast(`✓ "${result.name}" uploaded successfully!`, "success");
         setFileCount((n) => n + 1);
       }
+    },  addTransaction(status, "error", 4000);
+      } else if (status.includes("✓")) {
+        addToast(status, "success", 3000);
+        addTransaction(status, "success", 4000);
+      } else {
+        addToast(status, "info", 2000);
+        addTransaction(status, "info", 2000);
+      }
     },
-    [addToast]
-  );
-
-  const handleUploadProgress = useCallback(
-    (status) => {
-      if (status.includes("failed") || status.includes("error")) {
+    [addToast, addTransactiontus.includes("failed") || status.includes("error")) {
         addToast(status, "error", 3000);
       } else if (status.includes("✓")) {
         addToast(status, "success", 3000);
@@ -320,7 +333,8 @@ function App() {
             </div>
           </div>
         </aside>
-
+Transaction History Panel */}
+          {transactions.length > 0 && <TransactionPanel transactions={transactions} />
         {/* Right Content - Main Workspace */}
         <main className="workspace">
           {/* Upload */}
@@ -348,7 +362,10 @@ function App() {
                 )}
               </div>
               <div className="section-description">Manage your stored files and access permissions</div>
-            </div>
+            </div>{
+                addToast(msg, "success");
+                addTransaction(msg, "success", 5000);
+              }
             <Display
               contract={contract}
               account={account}
